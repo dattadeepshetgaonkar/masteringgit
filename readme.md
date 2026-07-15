@@ -1,3 +1,4 @@
-hello git
+hello git 
+new addings
 
---i am adding this from featurebranch
+console.log("hello world")
