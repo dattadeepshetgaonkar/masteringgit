@@ -3,9 +3,10 @@ import os
 import uuid
 from datetime import datetime
 
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, send_from_directory
 
 app = Flask(__name__)
+PUBLIC_DIR = os.path.join(os.path.dirname(__file__), "public")
 app.secret_key = os.environ.get("SECRET_KEY", "dev-secret-key-change-me")
 
 # On Vercel, only /tmp is writable. Locally, we use a data file next to app.py.
@@ -27,6 +28,13 @@ def load_tasks():
 def save_tasks(tasks):
     with open(DATA_FILE, "w") as f:
         json.dump(tasks, f, indent=2)
+
+
+@app.route("/style.css")
+def styles():
+    # On Vercel, files in public/ are served automatically by the CDN.
+    # Locally, Flask needs this route to serve the same file at the same path.
+    return send_from_directory(PUBLIC_DIR, "style.css")
 
 
 @app.route("/")
