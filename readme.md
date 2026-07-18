@@ -1,3 +1,5 @@
-heyooooo everyone i am writing my first commit 
+hello github 
 
-JSM here 
+i have developed an task manager app 
+
+this from Adrian file
