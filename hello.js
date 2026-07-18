@@ -1,3 +1,4 @@
-console.log("Hello, this is JSM here");
-console.log("just wanted to say hi");
-console.log("have a good day");
+console.log("Hello, World!");
+console.log("Hello, GITHUB!");
+console.log("Hello, this is from dev-adrian");
+console.log("Hello, this is from dev");
