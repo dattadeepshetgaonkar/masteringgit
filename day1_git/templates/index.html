@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block title %}Task Manager{% endblock %}
+
+{% block content %}
+  <header class="header">
+    <h1>📝 Task Manager</h1>
+    <p class="subtitle">A simple Flask app — add, prioritize, and track tasks.</p>
+  </header>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="flashes">
+        {% for category, message in messages %}
+          <div class="flash flash-{{ category }}">{{ message }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  <div class="stats">
+    <div class="stat"><span class="stat-num">{{ stats.total }}</span><span>Total</span></div>
+    <div class="stat"><span class="stat-num">{{ stats.active }}</span><span>Active</span></div>
+    <div class="stat"><span class="stat-num">{{ stats.done }}</span><span>Done</span></div>
+  </div>
+
+  <form class="add-form" action="{{ url_for('add_task') }}" method="POST">
+    <input type="text" name="title" placeholder="What needs to be done?" required autofocus>
+    <select name="priority">
+      <option value="low">Low</option>
+      <option value="medium" selected>Medium</option>
+      <option value="high">High</option>
+    </select>
+    <button type="submit">Add Task</button>
+  </form>
+
+  <nav class="filters">
+    <a href="{{ url_for('index', filter='all') }}" class="{{ 'active' if filter_by == 'all' }}">All</a>
+    <a href="{{ url_for('index', filter='active') }}" class="{{ 'active' if filter_by == 'active' }}">Active</a>
+    <a href="{{ url_for('index', filter='done') }}" class="{{ 'active' if filter_by == 'done' }}">Done</a>
+  </nav>
+
+  <ul class="task-list">
+    {% for task in tasks %}
+      <li class="task priority-{{ task.priority }} {{ 'done' if task.done }}">
+        <form action="{{ url_for('toggle_task', task_id=task.id) }}" method="POST" class="toggle-form">
+          <button type="submit" class="checkbox" aria-label="Toggle done">
+            {{ '✓' if task.done else '' }}
+          </button>
+        </form>
+
+        <span class="task-title">{{ task.title }}</span>
+        <span class="badge">{{ task.priority }}</span>
+
+        <form action="{{ url_for('delete_task', task_id=task.id) }}" method="POST" class="delete-form">
+          <button type="submit" class="delete-btn" aria-label="Delete task">✕</button>
+        </form>
+      </li>
+    {% else %}
+      <li class="empty">No tasks here. Add one above 🎉</li>
+    {% endfor %}
+  </ul>
+
+  <footer class="footer">
+    <p>Built with Flask · Data stored in JSON · <a href="{{ url_for('api_tasks') }}">View raw JSON API</a></p>
+  </footer>
+{% endblock %}

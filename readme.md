@@ -1,4 +1,3 @@
-hello git 
-new addings
+heyooooo everyone i am writing my first commit 
 
-console.log("hello world")
+JSM here 
